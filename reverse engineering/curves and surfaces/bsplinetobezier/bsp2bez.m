@@ -138,5 +138,7 @@ elseif nargin == 5 % surface conversion
         % after control points are calculated for one of the directions
         CN = cell2mat(cnewtemp);
         TN{dir} = tstemp;
+        % clear b
+        b=[];
     end
 end

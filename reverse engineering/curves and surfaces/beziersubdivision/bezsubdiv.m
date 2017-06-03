@@ -18,6 +18,8 @@ function [CP,CLU,CRU,CLW,CRW] = bezsubdiv(C,U,W)
 % [CP,CLU,CRU,CLW,CRW] = BEZSUBDIV(...) also returns ku-by-kw-3 matrices 
 % CLU, CRU, CLW and CRW for control points for top left, top right, bottom 
 % left and bottom right patches.
+% 
+% Code by Zhengyi Jiang from The University of Manchester
 
 if nargin == 2 % Bezier curve
     CLU = C(1,:); 
@@ -45,7 +47,7 @@ else % Bezier surface
     C = CLU;
     CLU = C(:,1,:); 
     CLW = C(:,end,:);
-    for i = 2:size(C,1)
+    for i = 2:size(C,2)
        C = (1-W)*C(:,1:end-1,:) + W*C(:,2:end,:);
        CLU = [CLU  C(:,1,:)]; 
        CLW = [C(:,end,:)  CLW];
@@ -55,7 +57,7 @@ else % Bezier surface
     C = CRU;
     CRU = C(:,1,:); 
     CRW = C(:,end,:);
-    for i = 2:size(C,1)
+    for i = 2:size(C,2)
        C = (1-W)*C(:,1:end-1,:) + W*C(:,2:end,:);
        CRU = [CRU  C(:,1,:)]; 
        CRW = [C(:,end,:)  CRW];
