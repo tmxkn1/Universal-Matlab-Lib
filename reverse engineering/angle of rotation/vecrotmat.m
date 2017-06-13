@@ -9,7 +9,10 @@ function varargout = vecrotmat(a1, a2, b1, b2)
 % [R, T1, T2, R1, R2, R3] = vectotmat(...) also returns all individual
 % translations and rotations.
 %
-% Running the function without input for a demo.
+% Running the function without input for a demo, i.e. vecrotmat.
+%
+% Example use of the result:
+% [ (b1 - b2) / norm(b1 - b2), 1 ] = [ (a1 - a2) / norm(a1 - a2), 1 ] * R
 %
 % Reference:
 % angle between two vectors:
