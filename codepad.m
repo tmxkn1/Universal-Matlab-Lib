@@ -1,18 +1,10 @@
-indices = 1:1000;
-data = zeros(size(indices));
+function codepad
 
-% some regions of data
-region1 = [50:100 200:340 450:500 670:980];
-region2 = setdiff(indices, region1);
-
-% generating random data
-data(region1) = rand(size(region1)) + 1;
-data(region2) = rand(size(region2));
+a=magic(6000);
+a=reshape(a,12000000,3);
+b=[1 21 42];
 
 
-figure(1);
-cla(gca);
-hold on;
-plot(region1, data(region1));
-plot(region2, data(region2));
-hold off;
+%c = a.^b;
+dist=sqrt((a(:,1)-b(1)).^2+(a(:,2)-b(2)).^2+(a(:,3)-b(3)).^2);
+%dist = sum(bsxfun(@minus, b, a) .^ 2, 2);

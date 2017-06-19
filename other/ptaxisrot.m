@@ -6,9 +6,7 @@ function R = ptaxisrot (v, p, a)
 % rotations about an axis defined by a direction vector V and a point P by
 % angle A.
 %
-% required file: VECROTMAT
-%
-% by Zhengyi Jiang, University of Manchester, 2017
+% requires VECROTMAT
 
 % normalise the direction vector in case it hasn't been done yet
 v = v(:)/norm(v);

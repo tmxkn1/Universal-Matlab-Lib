@@ -19,6 +19,10 @@ function varargout = vecrotmat(a1, a2, b1, b2)
 % https://uk.mathworks.com/matlabcentral/answers/16243-angle-between-two-vectors-in-3d
 % rotation matrix (orthogonal):
 % https://en.wikipedia.org/wiki/Rotation_matrix
+%
+% Required files: ROTY, ROTZ and ANGLE2D
+%
+% by Zhengyi Jiang, ELE Advanced Technologies Ltd., 2017
 
 if nargin == 0
     demo = 1;
@@ -26,17 +30,17 @@ else
     demo = 0;
 end
 
-a1 = a1(:)';
-a2 = a2(:)';
-b1 = b1(:)';
-b2 = b2(:)';
-
 if demo
     a1 = sign((randi(2,1,3)-1.5)).*randi(10,1,3);
     a2 = sign((randi(2,1,3)-1.5)).*randi(10,1,3);
     b1 = sign((randi(2,1,3)-1.5)).*randi(10,1,3);
     b2 = sign((randi(2,1,3)-1.5)).*randi(10,1,3);
 end
+
+a1 = a1(:)';
+a2 = a2(:)';
+b1 = b1(:)';
+b2 = b2(:)';
 
 % In this example lineA is going to be transformed to where lineB is, so they 
 % overlap.
@@ -134,7 +138,7 @@ pa = va(1:2);
 ra = angle2d(pa,[1,0]);
 
 % Find the first rotation matrix R1.
-R1 = [cos(ra) sin(ra) 0; -sin(ra) cos(ra) 0; 0 0 1];
+R1 = rotz(ra);%[cos(ra) sin(ra) 0; -sin(ra) cos(ra) 0; 0 0 1];
 
 % Transform va.
 va = va * R1;
@@ -158,7 +162,7 @@ angle2 = atan2(norm(cross([0 0 1],vb)),dot([0 0 1],vb));
 ra = angle2 - angle1;
 
 % Find the second rotation matrix R2.
-R2 = [cos(ra) 0 -sin(ra); 0 1 0; sin(ra) 0 cos(ra)];
+R2 = roty(ra);%[cos(ra) 0 -sin(ra); 0 1 0; sin(ra) 0 cos(ra)];
 
 % Transform va.
 va = va * R2;
@@ -184,7 +188,7 @@ pb = [vb(1) vb(2)];
 ra = angle2d(pa,pb);
 
 % Find the third rotation matrix R3.
-R3 = [cos(ra) sin(ra) 0; -sin(ra) cos(ra) 0; 0 0 1];
+R3 = rotz(ra);%[cos(ra) sin(ra) 0; -sin(ra) cos(ra) 0; 0 0 1];
 
 % Transform va.
 va = va * R3;
@@ -220,6 +224,3 @@ if demo
     xlabel x; ylabel y; zlabel z
     varargout = [varargout, [a1;a2], [b1;b2]];
 end
-
-function a = angle2d(v1,v2)
-a = atan2(v1(1)*v2(2) - v1(2)*v2(1), dot(v1,v2));

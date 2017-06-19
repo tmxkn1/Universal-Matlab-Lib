@@ -1,18 +1,18 @@
-ignoreddir = {'.git'};
+startupparam.ignoreddir = {'.git'};
 
-f = mfilename('fullpath');
-[path_, ~, ~] = fileparts(f);
-p = strsplit(genpath(path_),';');
+startupparam.f = mfilename('fullpath');
+[startupparam.path_, ~, ~] = fileparts(startupparam.f);
+startupparam.p = strsplit(genpath(startupparam.path_),';');
 
-for i = 1:numel(ignoreddir)
-    if isempty(p)
+for i = 1:numel(startupparam.ignoreddir)
+    if isempty(startupparam.p)
         break;
     end
-    p = p(cellfun(@isempty, strfind(p,ignoreddir{i})));
+    startupparam.p = startupparam.p(cellfun(@isempty, strfind(startupparam.p,startupparam.ignoreddir{i})));
 end
 
-if ~isempty(p)
-    addpath(strjoin(p,';'))
+if ~isempty(startupparam.p)
+    addpath(strjoin(startupparam.p,';'))
 end
 
-clear;
+clear startupparam i;
