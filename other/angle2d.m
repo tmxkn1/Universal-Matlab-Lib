@@ -1,7 +1,7 @@
 function a = angle2d(varargin)
 %ANGLE2D angle between two 2-D vectors in (-pi, pi] range.
 %
-% A = angle2d(V,W) returns angle A in radians between vectors V and W.
+% A = angle2d(V,W) returns angle A in radians from vector V to W.
 %
 % A = angle2d(...,'Degree') returns angle A in degrees.
 %
@@ -36,15 +36,15 @@ s2 = size(v2);
 if ~isequal(s1,s2)
     if isvector(v1)
         v1 = repmat(v1,s2(1),1);
-    elseif isvecotr(v2)
-        v2 = repmat(v1,s1(1),1);
+    elseif isvector(v2)
+        v2 = repmat(v2,s1(1),1);
     else
         error('Input arguments should be two vectors, two matrices of the same size or one vector and one matrix')
     end
 end
 
 v1 = v1./sqrt(sum(v1.^2,2));
-v2 = v2./sqrt(sum(v1.^2,2));
+v2 = v2./sqrt(sum(v2.^2,2));
 
 a = atan2(v1(:,1).*v2(:,2) - v1(:,2).*v2(:,1), dot(v1',v2')');
 
