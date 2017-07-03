@@ -1,4 +1,4 @@
-function   [xc,yc,R,a,mae] = circfit(x,y)
+function   [xc,yc,R,a,mae,y] = circfit(x,y)
 %
 %   [xc yx R] = circfit(x,y)
 %
@@ -20,6 +20,15 @@ xc = -.5*a(1);
 yc = -.5*a(2);
 R  =  sqrt((a(1)^2+a(2)^2)/4-a(3));
 
-if nargout == 5
-    mae = mean(abs(sqrt((x-xc).^2+(y-yc).^2)-R));
+if nargout >= 5
+    mae = abs(sqrt((x-xc).^2+(y-yc).^2)-R);
+end
+
+if nargout == 6
+    y1 = sqrt(R^2-(x-xc).^2)+yc;
+    y2 = -sqrt(R^2-(x-xc).^2)+yc;
+    if mean(abs(y1-y)) > mean(abs(y2-y))
+        y1 = y2;
+    end
+    y = y1;
 end
