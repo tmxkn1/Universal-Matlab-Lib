@@ -1,4 +1,4 @@
-function   [xc,yc,R,a,ae,y] = circfit(x,y)
+function   [xc,yc,R,a,me,y] = circfit(x,y)
 %
 %   [xc yx R] = circfit(x,y)
 %
@@ -21,7 +21,7 @@ yc = -.5*a(2);
 R  =  sqrt((a(1)^2+a(2)^2)/4-a(3));
 
 if nargout >= 5
-    ae = abs( sqrt( (x-xc).^2 + (y-yc).^2 ) - R );
+    me = abs( sqrt( (x-xc).^2 + (y-yc).^2 ) - R );
 end
 
 if nargout == 6
