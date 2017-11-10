@@ -1,4 +1,4 @@
-function   [xc,yc,R,a,me,y] = circfit(x,y)
+function   [xc,yc,R,a,me,xn,yn] = circfit(x,y)
 %
 %   [xc yx R] = circfit(x,y)
 %
@@ -24,12 +24,18 @@ if nargout >= 5
     me = abs( sqrt( (x-xc).^2 + (y-yc).^2 ) - R );
 end
 
-if nargout == 6
-    y1 = sqrt( R^2 - (x-xc).^2 ) + yc;
-    y2 = -sqrt( R^2 - (x-xc).^2 ) + yc;
-    
-    if mean( abs(y1-y) ) > mean( abs(y2-y) )
-        y1 = y2;
+if nargout == 7
+    xn = x;
+    yn = sign(y-yc).*sqrt( R^2 - (x-xc).^2 ) + yc;
+    % for x outside the circle, use y value for calculation
+    id = any(imag(yn),2);
+    if any(id)
+        xn(id) = sign(x(id)-xc).*sqrt( R^2 - (y(id)-yc).^2 ) + xc;
+        yn(id) = y(id);
     end
-    y = y1;
+%     
+%     if mean( abs(y1-y) ) > mean( abs(y2-y) )
+%         y1 = y2;
+%     end
+%     y = y1;
 end
