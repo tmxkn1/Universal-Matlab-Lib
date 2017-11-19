@@ -1,5 +1,7 @@
-function [ trans,d_avg, icp ] = FuncICP_Main(P_mp,P_surf,varargin)
+function [ trans,d_avg, icp ] = icptrans(P_mp,P_surf,varargin)
 % P_mp smaller set of points
+% P_surf = trans*P_mp
+% P_mp = (trans^-1*P_surf')'
 inp = inputParser;
 inp.addRequired('P_mp', @(x)isreal(x) && size(x,1) == 3);
 inp.addRequired('P_surf', @(x)isreal(x) && size(x,1) == 3);
@@ -12,6 +14,7 @@ inp.addParameter('MinE', 0.005, @(x)x >= 0);
 inp.addParameter('NoApproach', 1, @(x)x > 0);
 inp.addParameter('ApproachNo', 1, @(x)x > 0);
 inp.addParameter('DoPlot', false, @(x)islogical(x));
+inp.addParameter('ReportInterval',10,@(x)x > 0);
 
 validMinimize = {'SVD','Quaternion'};
 inp.addParameter('Minimize', 'Quaternion', @(x)any(strcmpi(x,validMinimize)));
@@ -25,7 +28,6 @@ clear('inp');
 
 arg.k_max = arg.MaxIterations;
 
-warning('This is a legacy function. Consider use ICPTRANS instead.')
 %%
 terminationInfo = {'Minimum error reached!','Convergence reached!',...
     'Maximum number of iteration...' };
@@ -131,6 +133,7 @@ while d(end)>=arg.MinE && k_count<=arg.NoApproach
         P=P+repmat([T_rand(1,k_count)+mu_p_surf(1);T_rand(2,k_count)+mu_p_surf(2);T_rand(3,k_count)+mu_p_surf(3)],1,N);
     end
     
+    time_ = 0;
     while converge<2 && d(end)>arg.MinE && k<arg.k_max
         tic;
         k=k+1;
@@ -194,13 +197,15 @@ while d(end)>=arg.MinE && k_count<=arg.NoApproach
         end
         
         timeCost(k) = toc;
-        if k/arg.k_max>nextProgressReport
+        time_ = timeCost(k)+time_;
+        if time_ >= arg.ReportInterval
             disp(['k count: ',num2str(k),'/',num2str(arg.k_max),...
                 '; Approach: ',num2str(k_count),'/',num2str(arg.NoApproach),...
                 '; deviation = ',num2str(round(d(k),6))]);
             timeEst = mean(timeCost)*(arg.k_max-k+(arg.NoApproach-k_count)*arg.k_max)/60;
             disp(['Estimated time remaining: ',num2str(round(timeEst,2)),'min']);
-            nextProgressReport = nextProgressReport+0.33;
+            time_ = 0;
+            %            nextProgressReport = nextProgressReport+0.33;
         end
     end
     
