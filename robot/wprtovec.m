@@ -11,6 +11,10 @@ function [n_new] = wprtovec(w, p, r, vector)
 % VI represents the direction vector in Cartesian coordinates at w=p=r=0.
 % =========================================================================
 
+if nargin < 3
+    error('Not enough input arguments.');
+end
+
 if nargin == 3
     n = [0, 0, 1, 0];
 else
