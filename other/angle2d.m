@@ -1,7 +1,8 @@
 function a = angle2d(varargin)
 %ANGLE2D angle between two 2-D vectors in (-pi, pi] range.
 %
-% A = angle2d(V,W) returns angle A in radians from vector V to W.
+% A = angle2d(V,W) returns angle A in radians from vector V to W. V and W
+% do not need to be normalised.
 %
 % A = angle2d(...,'Degree') returns angle A in degrees.
 %
