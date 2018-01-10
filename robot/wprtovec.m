@@ -18,6 +18,9 @@ end
 if nargin == 3
     n = [0, 0, 1, 0];
 else
+    if ~isequal(size(vector),[1,3])
+        error('[V] = WPRTOVEC(W, P, R, VI) VI must be a 1-by-3 array');
+    end
     n = [vector, 0];
 end
 

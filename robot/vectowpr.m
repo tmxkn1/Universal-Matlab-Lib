@@ -128,7 +128,7 @@ wprc = [w1 p1 r 999
 
 % Calculate the vector with passed combination of w, p
 for i = 1:4
-    s = FuncUSToolPath_wprTransformation(wprc(i,1), wprc(i,2), r, 0);
+    s = wprtovec(wprc(i,1), wprc(i,2), r);
     if mean(abs(s-A_ori)) < 0.0001
         wprc(i,4) = 1;
     end
@@ -147,7 +147,7 @@ V = [ 1 0 0 ];
 V = V/Rz;
 for i = 1:4
     if wprc(i,4) == 1
-       Vnew =  FuncUSToolPath_wprTransformation(wprc(i,1), wprc(i,2), r, V);
+       Vnew =  wprtovec(wprc(i,1), wprc(i,2), r, V);
        wprc(i,4) = abs(atan2(norm(cross(V,Vnew)),dot(V,Vnew)));
     end
 end
