@@ -27,6 +27,8 @@ if nargin > 0
     else
         c = curpath;
     end
+else
+    c = curpath;
 end
 
 p = genpath(c.path);
