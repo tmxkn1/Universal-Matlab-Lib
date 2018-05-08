@@ -1,1 +1,2 @@
-addallfolders(mfilename('fullpath'),'.git');
+p = addallfolders(mfilename('fullpath'),'.git');
+clear p
