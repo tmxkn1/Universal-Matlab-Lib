@@ -24,7 +24,7 @@ if nargout >= 5
     me = abs( sqrt( (x-xc).^2 + (y-yc).^2 ) - R );
 end
 
-if nargout == 7
+if nargout >= 6
     xn = x;
     yn = sign(y-yc).*sqrt( R^2 - (x-xc).^2 ) + yc;
     % for x outside the circle, use y value for calculation

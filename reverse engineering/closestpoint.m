@@ -1,19 +1,44 @@
 function [ cp,d,m ] = closestpoint(F, T, mode)
-% T target point set
-% F floating point set
-% For each point in F, find its closest point in T.
-% i.e. F covers a smaller area.
+%CLOSESTPOINT calculates the closest points between two given point sets
+%
+% C = closestpoint(F, T). 
+%
+% C = closestpoint(F, T, M) calculates the closest point C in T for each 
+% point in F using one of the two methods:
+%       1. kdtree method from statistics toolbox (M = 1)
+%       2. brutal force (M = 2)
+%
+% To improve efficiency, make sure T is the bigger point set.
+%
+% C = closestpoint(F, T) omitting M to allow the function choose the 
+% supposedly most efficient method automatically.
+%
+% [C, D] = closestpoint(...) also returns the distance between each point
+% and corresponding closest point.
+%
+% [C, D, M] = closestpoint(...) also returns the indices of C in T.
+%
+% Copyright 2018, Zhengyi Jiang
+
+if nargin < 2
+    error('Not enough input arguments.');
+end
+
+if size(T,2)~=size(F,2)
+    error('closestpoint(F, T) F and T must have the same number of columns.')
+end
 
 if nargin<3
     mode = 1;
-end
-
-if size(F,2)~=size(F,2)
-    error('Data size must be equal.')
+    
+    if size(T,1) < 20
+        % point size is too small to make a good use of kd tree.
+        mode = 2;
+    end
 end
 
 if ~license('test', 'Statistics_Toolbox')
-    mode = 1;
+    mode = 2;
 end
 
 switch mode
@@ -22,10 +47,11 @@ switch mode
         [m, d] = knnsearch(kdOBJ,F);
         cp = T(m,:);
     case 2
-        [cp, d, m] = match_distance(F,T);
+        [cp, d, m] = bfsearch(F,T);
 end
 
-function [cp,d,m] = match_distance(F,T)
+%% brutal force
+function [cp,d,m] = bfsearch(F,T)
 % T target point set
 % F floating point set
 [n,dim] = size(F);
@@ -37,17 +63,11 @@ m=zeros(n,1);
 xt = T(:,1);
 yt = T(:,2);
 
-if dim==2 % 2d
-    for i=1:n
-        dist = sqrt((F(i,1)-xt).^2+(F(i,2)-yt).^2);
-        [d(i),m(i)] = min(dist);
-        cp(i,:) = [xt(m(i)) yt(m(i))];
+for i = 1:n
+    dist = 0;
+    for j = 1:dim
+        dist = dist + (F(i,j)-T(:,j)).^2;
     end
-else % 3d
-    zt = T(:,3);
-    for i=1:n
-        dist = sqrt((F(i,1)-xt).^2+(F(i,2)-yt).^2+(F(i,3)-zt).^2);
-        [d(i),m(i)] = min(dist);
-        cp(i,:) = [xt(m(i)) yt(m(i)) zt(m(i))];
-    end
+    [d(i),m(i)] = min(sqrt(dist));
+    cp(i,:) = T(m(i),:);
 end
