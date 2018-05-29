@@ -1,7 +1,7 @@
 function varargout = vecrotmat(a1, a2, b1, b2)
 %VECROTMAT calculates a matrix that transforms one segment to the other 
-% such that the first segment overlaps the second and the two start points
-% are also overlapping.
+% such that the first segment is colinear with the second and the two start
+% points are also overlapping.
 %
 % R = vecrotmat(a1, a2, b1, b2) calculates a matrix, R, that transforms 
 % segment A1-A2 to segment B1-B2.

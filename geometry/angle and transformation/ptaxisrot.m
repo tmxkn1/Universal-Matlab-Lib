@@ -16,9 +16,9 @@ function R = ptaxisrot (varargin)
 % ================
 % Example: 
 % Rotate a 3D point set P by 90 degrees about a line defined by direction 
-% vector [0.5774 0.5774 0.5774] and a point [5 5 5].
+% vector [0.5774 0.5774 0.5774] and a point [3 5 2].
 %
-% R = ptaxisrot([0.5774 0.5774 0.5774], [5 5 5], pi); 
+% R = ptaxisrot([0.5774 0.5774 0.5774], [3 5 2], pi); 
 % P_transformed = [P ones(size(P,1),1)] * R;
 % ================ 
 %
@@ -63,14 +63,10 @@ if nargin >= 3
     end
 end
 
-% normalise the direction vector in case it hasn't been done yet
-v = v(:)/norm(v);
 p = p(:);
 
-% Rodrigues' rotation formula
-% calculate K
-K = [0 -v(3) v(2); v(3) 0 -v(1); -v(2) v(1) 0];
-R = eye(3) + sin(a) * K + (1-cos(a)) * K^2;
+% Rodrigues' rotation
+R = rodriguesrot(v, a);
 
 if isHom
     R = tmat2hom(R);
