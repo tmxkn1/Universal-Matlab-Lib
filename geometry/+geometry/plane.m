@@ -1,6 +1,6 @@
 classdef plane
     properties
-        Point geometry.point
+        PointObj geometry.point
         NormalVector (1,:) double
     end
     properties (SetAccess = immutable)
@@ -8,23 +8,31 @@ classdef plane
     end
     properties (Dependent)
         Dimension
+        Point
     end
     
     methods
         function obj = plane(point, normalvector)
+            obj.Type = geometry.type.Plane;
+            if nargin == 0
+                return
+            end
             
             if isa(point, 'geometry.point')
-                obj.Point = copy(point);
+                obj.PointObj = copy(point);
             else
-                obj.Point = geometry.point(point);
+                obj.PointObj = geometry.point(point);
             end
             
             obj.NormalVector = normalvector/norm(normalvector);
-            obj.Type = geometry.type.Plane;
         end
         
         function val = get.Dimension(obj)
             val = numel(obj.NormalVector);
-        end            
+        end      
+        
+        function val = get.Point(obj)
+            val = obj.PointObj.Value;
+        end       
     end
 end

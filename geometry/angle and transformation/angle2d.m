@@ -4,6 +4,8 @@ function a = angle2d(varargin)
 % A = angle2d(V,W) returns angle A in radians from vector V to W. V and W
 % do not need to be normalised.
 %
+% NOTE: Positive is anti-clockwise.
+%
 % A = angle2d(...,'Degree') returns angle A in degrees.
 %
 % by Zhengyi Jiang, University of Manchester, 2017
@@ -27,7 +29,7 @@ if narg == 3
         error('Invalid parameter ''%s''. A valid parameter is ''Degree''.',s)
     end
 end
-    
+
 v1 = varargin{1};
 v2 = varargin{2};
 

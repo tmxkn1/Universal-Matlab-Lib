@@ -15,8 +15,12 @@ classdef point < handle
     
     methods
         function obj = point(val)
-            obj.Value = val;
             obj.Type = geometry.type.Point;
+            if nargin == 0
+                return
+            end
+            
+            obj.Value = val;
         end
         
         function val = get.Dimension(obj)

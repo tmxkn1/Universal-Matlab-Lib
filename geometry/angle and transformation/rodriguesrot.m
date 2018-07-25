@@ -4,6 +4,8 @@ function R = rodriguesrot(ax, s, c)
 % R = rodriguesrot(AX, A) calculates a rotation matrix R from the rotary
 % axis AX and the angle of rotation A.
 %
+% NOTE: rotation follows the left hand rule.
+%
 % R = rodriguesrot(AX, S, C) calculates a rotation matrix R from the rotary
 % axis AX and sin, S, and cosin, C, of the angle.
 %
@@ -20,7 +22,7 @@ end
 % in the case where two vectors are colinear/parallel.
 if all(ax==0)
     R = eye(3);
-    return;
+    return
 end
 
 % normalise the direction vector in case it hasn't been done yet
