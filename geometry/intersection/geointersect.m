@@ -11,19 +11,73 @@ inputobj = inputobj(id);
 
 if isequal(types, [2,2])
     % line line
-    disp('line line has not been implemented');
+    if inputobj{1}.Dimension == 3
+        [obj, condi] = lineline3D(inputobj{1}, inputobj{2});
+    elseif inputobj{1}.Dimension == 2
+        [obj, condi] = lineline2D(inputobj{1}, inputobj{2});
+    end
+        
 elseif isequal(types, [2,3])
     % line plane
     [obj, condi] = planeline(inputobj{1}, inputobj{2});
-    disp('line plane')
-elseif isequal(type, [3,3])
+elseif isequal(types, [3,3])
     % plane plane
     disp('plane plane')
-elseif iseuqla(type, [2,4])
+elseif isequal(types, [2,4])
     % line circle
-    disp('line circle')
+    [obj, condi] = linecirc(inputobj{1}, inputobj{2});
 end
 
+function [I, C]=lineline3D(l1, l2)
+%oUTPUTS:
+%
+% I is the point of intersection 
+%
+% C indicates intersection condition: 
+%   0 => no intersection
+%   1 => parallel or colinear
+%   2 => intersects
+
+I = nan(1, 3);
+C = 0;
+g = l1.Point - l2.Point;
+h = norm(cross(l1.DirectionVector, g));
+if h == 0
+    return % no intersection
+end
+k = norm(cross(l1.DirectionVector, l2.DirectionVector));
+if k == 0
+    C = 1; % parallel
+    return
+end
+C = 2; % intersection found
+t = h/k * l2.DirectionVector;
+I1 = l2.Point + t;
+if l1.isOnLine(I1)
+    I = I1;
+    return
+end
+I = l2.Point - t;    
+
+function [I, C]=lineline2D(l1, l2)
+%oUTPUTS:
+%
+% I is the point of intersection 
+%
+% C indicates intersection condition: 
+%   1 => parallel or colinear
+%   2 => intersects
+
+t = (l2.Point - l1.Point) / [l1.DirectionVector; -l2.DirectionVector];
+
+if any(abs(t) == [inf inf])
+    C = 1;
+    I = nan(1, 2);
+    return;
+end
+
+C = 2;
+I = t(1) * l1.DirectionVector + l1.Point;
 
 function [I, C]=planeline(line, plane)
 %Outputs: 
@@ -38,9 +92,9 @@ function [I, C]=planeline(line, plane)
 % This function is adopted from "plane_line_intersection" written by Nassim
 % Khaled, Wayne State University, Research Assistant and Phd candidate
 
-I=nan(1, line.Dimension);
+I = nan(1, line.Dimension);
 u = line.DirectionVector;
-w = line.Point.Value - plane.Point.Value;
+w = line.Point - plane.Point;
 D = dot(plane.NormalVector, u);
 N = -dot(plane.NormalVector, w);
 
@@ -56,18 +110,47 @@ end
 
 %compute the intersection parameter
 sI = N / D;
-I = line.Point.Value+ sI.*u;
+I = line.Point+ sI.*u;
 C = 1;
 
+function [I,C] = linecirc(line,circ)
+%Outputs: 
+%
+% I is a 2-by-n matrix, each row representing one point of intersection 
+%
+% C indicates intersection condition: 
+%   0 => no intersection 
+%   1 => the line intersects the circle at one point
+%   2 => the line intersects the circle at two points
+%
+% by Zhengyi Jiang, ELE Advanced Technologies Ltd, 2017
 
+I = [];
+C = 0;
 
+% Solve t^2 * (dot(Ld,Ld)) + 2t*(dot(-C,Ld)) + (dot(C,C) - r^2 ) = 0 for t,
+% where Ld is the direction vector of the line, C is the centre of the
+% circle, r is the radius, and t = PoI(x,y,z...)/Ld(x,y,z...)
+d = line.Point-circ.Centre;
+a = dot(line.DirectionVector, line.DirectionVector);
+b = 2*dot(d,line.DirectionVector);
+c = dot(d, d) - circ.Radius^2;
+t = b^2-4*a*c;
 
+% no intersection
+if t < 0
+    return
+end
 
+t = sqrt(t);
+t1 = (-b - t)/2/a;
+t2 = (-b + t)/2/a;
 
+if t1==t2
+    C = 1;
+else
+    C = 2;
+end
 
-
-
-
-
-
-
+I = [t1*line.DirectionVector + line.Point
+    t2*line.DirectionVector + line.Point];
