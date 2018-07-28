@@ -21,6 +21,6 @@ if d1~=numel(r)
     error('The number of hole centres do not equal to the number of radii.');
 end
 
-th = linspace(0,2*pi,n+1)';
+th = linspace(0,2*pi,n)';
 x = r.*cos(th)+c(:,1)'; 
 y = r.*sin(th)+c(:,2)';

@@ -60,9 +60,6 @@ cp=zeros(n,dim);
 d=zeros(n,1);
 m=zeros(n,1);
 
-xt = T(:,1);
-yt = T(:,2);
-
 for i = 1:n
     dist = 0;
     for j = 1:dim
