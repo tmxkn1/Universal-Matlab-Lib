@@ -1,4 +1,24 @@
 function [uu, ww, p_ordered, tri] = bspsurfspparam(u,w,p,plot2dmesh)
+% Calculates Floater's shape preserving parametrisation.
+%
+% Floater's shape preserving parametrisation requires a surface mesh of
+% the 3D points. This function does not require you to supply the surface
+% mesh but instead a set of coarsely parametrised coordinates using other
+% methods such as chord-length parametrisation.
+%
+% -------------------------------------------------------------------------
+% USE:
+%
+% [UU, WW] = bspsurfspparam(U, W, P) parametrises a set of 3D points P 
+% using Floater's shape preserving parametrisation algorithm. U contains 
+% the coarsely parametrised coordinates in the u-direction and W contains 
+% those in the w-direction. The output is a set of shape-preserved 
+% parametrised coordinates, UU and WW, in the u- and w-direction
+% respectively.
+%
+% -------------------------------------------------------------------------
+% See also: bspsurffit, bspcurvefit
+
 if nargin < 4
     plot2dmesh = 0;
 end
@@ -242,7 +262,7 @@ for id=1:N   % Check every point in sequence
     %% STEP 3. Get final stuff done
     % Calculate the Barycentric Coordinates
     [tarea]=bspsurfspparamarea(ppx,ppy); 
-    for l=1:k-1                  % record ¦Ë into tp and td
+    for l=1:k-1                  % record ï¿½ï¿½ into tp and td
         if idp(l)<=N
             tp(id,idp(l))=tp(id,idp(l))-tarea(l+1);
         else

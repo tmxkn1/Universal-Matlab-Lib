@@ -4,7 +4,7 @@ function [xc,yc,R,a,me,xn,yn] = circfit(x,y)
 
 if nargout >=4
     a = [-2*xc, -2*yc];
-    a(3) = (a(1)^2+a(2)^2)/4-r^2;
+    a(3) = (a(1)^2+a(2)^2)/4-R^2;
 end
 
 if nargout >= 5

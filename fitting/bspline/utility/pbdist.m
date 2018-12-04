@@ -1,50 +1,62 @@
 function [pdist, pclst] = pbdist(p, c, knotu, knotw, ku, kw, varargin)
-%PBDIST Evaluation of distances between points and a B-spline surface
-% PDIST = PBDIST(P, C, KNOTU, KNOTW, KU, KW) returns distances PDIST 
-% between each point in P (x-by-3) and a B-spline surface defined by 
-% control points C (n-by-m-3), with knots KNOTU (n+ku-by-1) and of order 
-% KU in u-direction and knots KNOTW (m+kw-by-1) and of order KW in 
-% w-direction.
-%
-% [PDIST, PCLST] = PBDIST(...) also returns the closest points on the
-% B-spline surface.
+% Calculates the distances between points in 3D and a B-spline surface.
 %
 % The function first decomposes the B-spline surface into several Bezier
-% patches and generate a number of points on each patch. These generated
-% points are compared with P until the closest point for each point in P 
-% found. This establishes initial guesses of projections of P on the
-% B-spline surface.
-% Next, the initial guesses are refined by subdividing the Bezier patches
-% around the closest points until the distances between the closest points
-% and P converge.
+% patches and generates a number of points (15*30 by default) on each
+% patch. Then, for each point in the input point set, a closest point is
+% found on the Bezier patch. Next, for each closest point, the Bezier patch
+% it belongs to is subdivided around the point and a new closest point is
+% found for the corresponding point in the point set. This is performed
+% iteratively until the distance the two points converge.
+%
+% -------------------------------------------------------------------------
+% USE:
+%
+% D = pbdist(P, C, VU, VW, KU, KW) returns distances, D, between each point 
+% in P and a B-spline surface defined by control points, C, with knot
+% vectors, KU and KW, in u- and w-direction.
+%
+%   Input:  P  - a p*3 matrix, containing a point set.
+%           C  - an n*m matrix, containing the control points.
+%           VU - a column vector, containing the parametrised coordinates
+%                on the B-spline surface in the u-direction.
+%           VW - a column vector, containing the parametrised coordinates
+%                on the B-spline surface in the w-direction.
+%           KU - a column vector, containing the knots of the B-spline 
+%                surface in the u-direction.
+%           KW - a column vector, containing the knots of the B-spline 
+%                surface in the w-direction.
+%
+% [D, PC] = pbdist(...) also returns the coordinates of the corresponding 
+% closest points, PC, on the B-spline for surface for each point in the 
+% point set.
 %
 % The number of points generated on EACH Bezier patch can be specified with
 % 'StartPtsSize':
-% [...] = PBDIST(..., 'StartPtsSize', [A, B])
-% A defines the number of points in u-direction and B, w-direction. By
-% default, 15-by-30 points are generated.
+% [...] = pbdist(..., 'StartPtsSize', [A, B])
+% A represents the number of points in the u-direction and B represents the
+% number in the w-direction.
 %
 % The converging criteria can be specified with 'ConvCriteria':
-% [...] = PBDIST(..., 'ConvCriteria', A)
-% By default, A=0.001.
+% [...] = pbdist(..., 'ConvCriteria', C)
+% By default, C = 0.001.
 %
-% [...] = PBDIST(..., 'ProgressBar', 'on') shows a progress bar.
+% [...] = pbdist(..., 'ProgressBar', 'on') also shows a progress bar.
 %
-% -------
+% -------------------------------------------------------------------------
 % Required custom functions:
 % bsp2bez, bezsubdiv
 %
-% -------
-% Required Toolboxes:
+% Toolboxes:
 % Statistics and Machine Learning Toolbox
 % Parallel Computing Toolbox (can be removed by changing 'parfor' to 'for'.
 %
-% ref: 
+% -------------------------------------------------------------------------
+% Reference: 
+%
 % Ma, Y. & Hewitt, W. (2003) Point inversion and projection for NURBS 
 % curve: Control polygon approach, Theory and Practice of Computer Graphics
-% TPCG 2003, vol. 20, pp. 113¨C120.
-%
-% Coded by Zhengyi Jiang from The University of Manchester
+% TPCG 2003, vol. 20, pp. 113:C120.
 
 pars = inputParser;
 addRequired(pars,'p');

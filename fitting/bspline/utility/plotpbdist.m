@@ -1,4 +1,17 @@
 function fh = plotpbdist(fh, dist, p, pmatched)
+% Plots the distances from one set of points to another set of points
+%
+% This function does not calculate the distances. 
+% -------------------------------------------------------------------------
+% USE:
+%
+% H = plotpbdist(D, P, PM) plots a colourful figure shows the distances, D,
+% from a set of points, P, to another set of points, PM, where 
+%       PM(x,y,z)_i = P(x,y,z)_i + D*n(x,y,z)_i.
+% The output is a handle to the figure object.
+%
+% H = plotpbdist(H, D, P, PM) plots the figure on an existing figure object
+% whose handle is H.
 
 if nargin ~= 4
     pmatched = p;

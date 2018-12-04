@@ -1,12 +1,11 @@
 function [CN, TN] = bsp2bez(var1, var2, var3, var4, var5)
-%BSP2BEZ Decomposes a clamped B-spline curve or surface into several Bezier
-% curves or patches.
+%Decomposes a clamped B-spline curve/surface into Bezier curves/patches.
 %
-% CN = BSP2BEZ(T, C, K) decomposes a K-th order clamped B-spline curve with
+% CN = bsp2bez(T, C, K) decomposes a K-th order clamped B-spline curve with
 % knots T and control points C into Bezier curves with control points CN.
 % - C is a N-by-3 matrix, where N by law equals numel(T)-K.
 % 
-% CN = BSP2BEZ(TU, TW, C, KU, KW) decomposes a clamped B-spline curve of
+% CN = bsp2bez(TU, TW, C, KU, KW) decomposes a clamped B-spline curve of
 % order KU with knots TU in the u-direciton and of order KW with knots TW 
 % in the w-direction into Bezier patches with control points CN.
 % - C is a NU-by-NW-by-3 matrix, where NU = numel(TU)-KU and 
@@ -15,6 +14,9 @@ function [CN, TN] = bsp2bez(var1, var2, var3, var4, var5)
 % [CN, TN] = bsp2bez(...) also returns the knots after insertion.
 %
 % ref: http://www.infogoaround.org/JBook/bstobez.html
+%
+% -------------------------------------------------------------------------
+% See also: bezfit, bspgenpoints
 
 if nargin == 3 % curve conversion
     ts = var1(:);

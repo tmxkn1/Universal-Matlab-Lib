@@ -1,28 +1,36 @@
 function [varargout]=bspsurffit(varargin)
-% BSPSURFFIT calculates a B-spline surface based on a set of input
-% parameters.
+% Fits a B-spline surface to a set of 3D points.
 %
-% [BS] = BSPSURFFIT(P,U,W,CU,CW) 
-% requires inputs:
-%   * P    a set of surface points in 3D Cartesian coordinates
-%   * U    parameters in u-direction
-%   * W    parameters in w-direction
-%   * CU   Number of control points in u-direction
-%   * CW   Number of control points in w-direction
-% returns a structured varible BS:
-%   * BS.cx, BS.cy, BS.cz are CU-by-CW matrices for the x, y and z 
-%     components of the control points, respectively.
-%   * BS.knotu and BS.knotw are knot vectors in u and w directions,
-%   respectively.
+% -------------------------------------------------------------------------
+% USE:
 %
-% [FP, BS] = BSPSURFFIT(...,NU,NW) 
-% with two more parameters:
-%   * NU   Number of fitted points in u direction
-%   * NW   Number of fitted points in w direction
-% returns fitted surface points, FP (NU*NW-by-3), as the first argument,
-% and the same structured variable metioned above.
+% [BS] = bspsurffit(P, U, W, CU, CW) 
 %
-% by Zhengyi Jiang, The University of Manchester, 2017
+%   Input:  P  - a set of 3D points.
+%           U  - parametric coordinates of P in the u-direction.
+%           W  - parametric coordinates of P in the w-direction
+%           CU - number of control points in the u-direction.
+%           CW - number of control points in the w-direction.
+% 
+%   Output: BS - a structure with following fields:
+%       * cx - CU*CW matrices, containing the X coordinates of the control
+%               points.
+%       * cy - CU*CW matrices, containing the Y coordinates of the control
+%               points.
+%       * cz - CU*CW matrices, containing the Z coordinates of the control
+%               points.
+%       * knotu - knots of the B-spline surface in the u-direction.
+%       * knotw - knots of the B-spline surface in the w-direction.
+%
+% [PG, BS] = bspsurffit(..., NU, NW) by supplying two extra values:
+%   NU, the number of points to be generated in the u-direction, and 
+%   NW, the number of points to be generated in the w-direction,
+% a set of points, PG, can be generated on the B-spline surface and 
+% returned.
+%
+% -------------------------------------------------------------------------
+% See also: bspsurfspparam, bspsurfspparam, bspcurvefit
+
 
 % Parse arguments
 if nargin ~= 7 && nargin ~= 9
